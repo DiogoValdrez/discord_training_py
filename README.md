@@ -1,6 +1,6 @@
 # discord_training_py
-Made by DiogoValdrez
+Project made by DiogoValdrez
 
 Just to learn how to use discod.py
 
-For more info contact me Discord: Duz#8881
+For more info contact me in Discord: Duz#8881
