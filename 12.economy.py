@@ -261,5 +261,5 @@ async def buy_this(user, item_name, amount):
     return [True, "Worked"]
 
 
-client.run('ODA1NTAzMDYxMjQ5NDkxMDM1.YBb1Lw.Tfv-I7WqLrstcEo7fPRCnKm4HgQ')#tirar a key
+client.run('')#tirar a key
 
