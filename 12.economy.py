@@ -7,7 +7,8 @@ from discord import embeds
 from discord.ext import commands
 from discord.ext.commands.core import wrap_callback
 
-client = commands.Bot(command_prefix='.')
+intents = discord.Intents.all()
+client = commands.Bot(command_prefix='.', intents=intents)
 
 
 mainshop = [{"name":"Watch", "price":100, "description":"Time"},
@@ -27,7 +28,7 @@ async def balance(ctx):
     await open_account(ctx.author)
     user = ctx.author
     users = await get_bank_data()
-    wallet_amt = users[str(user.id)]['wallet']
+    wallet_amt = users[str(user.id)]['wallet']#posso por int para arredondar
     bank_amt = users[str(user.id)]['bank'] 
     em = discord.Embed(title = f"{user.name}'s balance", color = discord.Color.red())
     em.add_field(name = 'Wallet balance', value=wallet_amt)
@@ -192,6 +193,88 @@ async def bag(ctx):
         amount = item["amount"]
         em.add_field(name = name, value = amount)
     await ctx.send(embed = em)
+
+
+@client.command()
+async def sell(ctx,item,amount = 1):
+    await open_account(ctx.author)
+    res = await sell_this(ctx.author,item,amount)
+    if not res[0]:
+        if res[1]==1:
+            await ctx.send("That Object isn't there!")
+            return
+        if res[1]==2:
+            await ctx.send(f"You don't have {amount} {item} in your bag.")
+            return
+        if res[1]==3:
+            await ctx.send(f"You don't have {item} in your bag.")
+            return
+    await ctx.send(f"You just sold {amount} {item}.")
+
+
+@client.command(aliases = ["lb"])
+async def leaderboard(ctx,x = 3):
+    users = await get_bank_data()
+    leader_board = {}
+    total = []
+    for user in users:
+        name = int(user)
+        total_amount = users[user]["wallet"] + users[user]["bank"]
+        leader_board[total_amount] = name
+        total.append(total_amount)
+    total = sorted(total,reverse=True)    
+    em = discord.Embed(title = f"Top {x} Richest People" , description = "This is decided on the basis of raw money in the bank and wallet",color = discord.Color(0xfa43ee))
+    index = 1
+    for amt in total:
+        id_ = leader_board[amt]
+        member = client.get_user(id_) #member object
+        name = member.name
+        em.add_field(name = f"{index}. {name}" , value = f"{amt}",  inline = False)
+        if index == x:
+            break
+        else:
+            index += 1
+    await ctx.send(embed = em)
+
+
+async def sell_this(user,item_name,amount,price = None):
+    item_name = item_name.lower()
+    name_ = None
+    for item in mainshop:
+        name = item["name"].lower()
+        if name == item_name:
+            name_ = name
+            if price==None:
+                price = 0.9* item["price"]
+            break
+    if name_ == None:
+        return [False,1]
+    cost = price*amount
+    users = await get_bank_data()
+    bal = await update_bank(user)
+    try:
+        index = 0
+        t = None
+        for thing in users[str(user.id)]["bag"]:
+            n = thing["item"]
+            if n == item_name:
+                old_amt = thing["amount"]
+                new_amt = old_amt - amount
+                if new_amt < 0:
+                    return [False,2]
+                users[str(user.id)]["bag"][index]["amount"] = new_amt
+                t = 1
+                break
+            index+=1 
+        if t == None:
+            return [False,3]
+    except:
+        return [False,3]    
+    with open("mainbank.json","w") as f:
+        json.dump(users,f)
+    await update_bank(user,cost,"wallet")
+    return [True,"Worked"]
+
 
 async def open_account(user):
     users = await get_bank_data()
