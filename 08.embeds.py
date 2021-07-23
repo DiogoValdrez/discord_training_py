@@ -1,6 +1,8 @@
 import discord
 import random
 from discord.ext import commands, tasks
+import os
+from dotenv import load_dotenv
 
 client = commands.Bot(command_prefix='.')
 images = ['https://i.imgur.com/gAWGNnn.jpg',
@@ -27,5 +29,6 @@ async def image(ctx):
     await ctx.send(embed = embed)
     #await ctx.author.send(embed = embed) #assim enviaria para as DM
 
-client.run('ODA1NTAzMDYxMjQ5NDkxMDM1.YBb1Lw.kTvnuYsO_STUKlM8Xq56GqVr2d8')
+load_dotenv()
+client.run(os.getenv('TOKEN'))
 

@@ -1,6 +1,8 @@
 import discord
 from discord.ext import commands, tasks
 from itertools import cycle
+import os
+from dotenv import load_dotenv
 
 client =  commands.Bot(command_prefix = '.')
 status = cycle(['status_1', 'status_2'])
@@ -16,4 +18,5 @@ async def change_status():
 
 
 
-client.run('ODA1NTAzMDYxMjQ5NDkxMDM1.YBb1Lw.kTvnuYsO_STUKlM8Xq56GqVr2d8')
+load_dotenv()
+client.run(os.getenv('TOKEN'))

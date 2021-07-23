@@ -1,6 +1,8 @@
 import discord
 from discord.ext import commands
 import random
+import os
+from dotenv import load_dotenv
 
 client =  commands.Bot(command_prefix = '.')
 
@@ -92,4 +94,5 @@ async def mute(ctx, member : discord.Member):
     await ctx.send(member.mention + "has been muted")
 
 
-client.run('ODA1NTAzMDYxMjQ5NDkxMDM1.YBb1Lw.kTvnuYsO_STUKlM8Xq56GqVr2d8')
+load_dotenv()
+client.run(os.getenv('TOKEN'))

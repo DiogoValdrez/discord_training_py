@@ -1,5 +1,7 @@
 import discord
 from discord.ext import commands
+import os
+from dotenv import load_dotenv
 
 client =  commands.Bot(command_prefix = '.')
 
@@ -20,4 +22,5 @@ def is_it_me(ctx):
 async def example(ctx):
     await ctx.send(f'Hi im {ctx.author}')
 
-client.run('ODA1NTAzMDYxMjQ5NDkxMDM1.YBb1Lw.kTvnuYsO_STUKlM8Xq56GqVr2d8')
+load_dotenv()
+client.run(os.getenv('TOKEN'))

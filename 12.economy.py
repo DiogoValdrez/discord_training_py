@@ -1,11 +1,12 @@
 from operator import index
 import discord
 import json
-import os
 import random
 from discord import embeds
 from discord.ext import commands
 from discord.ext.commands.core import wrap_callback
+import os
+from dotenv import load_dotenv
 
 intents = discord.Intents.all()
 client = commands.Bot(command_prefix='.', intents=intents)
@@ -343,6 +344,6 @@ async def buy_this(user, item_name, amount):
     await update_bank(user, cost*-1,"wallet")
     return [True, "Worked"]
 
-
-client.run('')#tirar a key
+load_dotenv()
+client.run(os.getenv('TOKEN'))
 

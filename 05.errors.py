@@ -1,5 +1,7 @@
 import discord
 from discord.ext import commands
+import os
+from dotenv import load_dotenv
 
 client =  commands.Bot(command_prefix = '.')
 
@@ -28,4 +30,5 @@ async def clear(ctx, amount : int):
 async def clear_error(ctx, error):
     await ctx.send('Specify an amount of mesages to delete')
 
-client.run('ODA1NTAzMDYxMjQ5NDkxMDM1.YBb1Lw.kTvnuYsO_STUKlM8Xq56GqVr2d8')
+load_dotenv()
+client.run(os.getenv('TOKEN'))

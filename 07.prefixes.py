@@ -1,6 +1,8 @@
 import discord
 import json
 from discord.ext import commands
+import os
+from dotenv import load_dotenv
 
 def get_prefix(client, message):
     with open('07.prefixes.json', 'r') as f:
@@ -47,4 +49,5 @@ async def changeprefix(ctx, prefix):
     await ctx.send(f'Prefix changed to: {prefix}')
 
 
-client.run('ODA1NTAzMDYxMjQ5NDkxMDM1.YBb1Lw.kTvnuYsO_STUKlM8Xq56GqVr2d8')
+load_dotenv()
+client.run(os.getenv('TOKEN'))
